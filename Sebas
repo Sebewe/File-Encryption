@@ -1,0 +1,28 @@
+namespace File_Encryption {
+	
+	public class Sebas : Crypter {
+		
+		private int width;
+		private int height;
+		private string message;
+		
+		public Sebas(int width, int height, string file, string message) : base("png", "Sebas", file) {
+			this.width = width;
+			this.height = height;
+			this.message = message;
+			if (!(file == "" | file == null)) return;
+			var path = System.IO.Path.GetFullPath("Sebas.cs");
+			System.IO.Path.Combine(path, System.IO.Path.GetRandomFileName());
+		}
+
+		public override string encryptFile() {
+			throw new System.NotImplementedException();
+		}
+
+		public override string decryptFile(string file) {
+			throw new System.NotImplementedException();
+		}
+		
+	}
+	
+}
