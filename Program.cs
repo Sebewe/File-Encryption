@@ -11,6 +11,7 @@
  */
 
 using System;
+using System.IO;
 
 namespace File_Encryption {
 	
