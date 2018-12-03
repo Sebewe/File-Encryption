@@ -1,3 +1,6 @@
+
+using System.IO;
+
 namespace File_Encryption {
 	
 	public class Sebas : Crypter {
@@ -5,14 +8,33 @@ namespace File_Encryption {
 		private int width;
 		private int height;
 		private string message;
+		private int[,] list;
 		
 		public Sebas(int width, int height, string file, string message) : base("png", "Sebas", file) {
 			this.width = width;
 			this.height = height;
 			this.message = message;
-			if (!(file == "" | file == null)) return;
-			var path = System.IO.Path.GetFullPath("Sebas.cs");
-			System.IO.Path.Combine(path, System.IO.Path.GetRandomFileName());
+			this.init();
+			if (!string.IsNullOrEmpty(file)) return;
+			
+			var fileName = "sebas.txt";
+			var path = Directory.GetCurrentDirectory();
+			path = path.Substring(0, path.Length - 10);
+			path = System.IO.Path.Combine(path, fileName);
+			
+			base.log(path);
+		}
+
+		private void init() {
+			this.list = new int[,] {
+				{0, 0, 0},   //a
+				{20,20,20},  //b
+				{12,50,28},  //c
+				{250,0,0},   //d
+				{250,250,0}, //e
+				{250,0,250}, //f
+				{0,250,250}, //g
+			};
 		}
 
 		public override string encryptFile() {
