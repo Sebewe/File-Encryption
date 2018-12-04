@@ -1,4 +1,5 @@
 
+using System.Drawing;
 using System.IO;
 
 namespace File_Encryption {
@@ -9,41 +10,71 @@ namespace File_Encryption {
 		private int height;
 		private string message;
 		private int[,] list;
+		private char[] chars;
+		private int path;
 		
 		public Sebas(int width, int height, string file, string message) : base("png", "Sebas", file) {
 			this.width = width;
 			this.height = height;
 			this.message = message;
+			init(file);
 			this.init();
-			if (!string.IsNullOrEmpty(file)) return;
-			
-			var fileName = "sebas.txt";
-			var path = Directory.GetCurrentDirectory();
-			path = path.Substring(0, path.Length - 10);
-			path = System.IO.Path.Combine(path, fileName);
-			
-			base.log(path);
 		}
 
-		private void init() {
+		private void init(string file) {
 			this.list = new int[,] {
-				{0, 0, 0},    //a
-				{20,20,20},   //b
-				{12,50,28},   //c
-				{250,0,0},    //d
-				{250,250,0},  //e
-				{250,0,250},  //f
-				{0,250,250},  //g
-				{0,255,0},    //h
-				{126,0,20},   //i
-				{20,70,20},   //j
-				{123,123,255},//k
-				{80,90,120},  //l
-			};
+				{0, 0, 0},      //a
+				{20, 20, 20},   //b
+				{12, 50, 28},   //c
+				{250, 0, 0},    //d
+				{250, 250, 0},  //e
+				{250, 0, 250},  //f
+				{0, 250, 250},  //g
+				{0, 255, 0},    //h
+				{126, 0, 20},   //i
+				{20, 70, 20},   //j
+				{123, 123, 255},//k
+				{80, 90, 120},  //l
+				{75, 250, 20},  //m
+				{80, 188, 80},  //n
+				{25, 99, 100},  //o
+				{22, 180, 24},  //p
+				{69, 69, 69},   //q
+				{222, 111, 000},//r
+				{4, 2, 0},      //s
+				{1, 2, 3},      //t
+				{11,22,33},     //u
+				{80,90,100},    //v
+				{213,74,202},   //w
+				{101,202,28},   //x
+				{123,79,123},   //y
+				{169,142,74},   //z
+				{103,106,61},   //SPACE
+				{29,200,132},   //PERIOD
+			}; // all the colors
+			this.chars = new char[] {
+				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+				'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+				' ', '.'
+			}; //all the letters that correspond with the colors
+			
+			if (!string.IsNullOrEmpty(file)) return;
+			
+			const string fileName = "sebas.png";
+			var path = Directory.GetCurrentDirectory();
+			log(path);
+			path = path.Substring(0, path.Length - 10);
+			path = System.IO.Path.Combine(path, fileName);
+
 		}
 
 		public override string encryptFile() {
-			throw new System.NotImplementedException();
+			Bitmap bmp = new Bitmap(50,50);
+			Graphics g = Graphics.FromImage(bmp);
+			g.FillRectangle(Brushes.Green, 0, 0, 50, 50);
+			g.Dispose();
+			bmp.Save("filepath", System.Drawing.Imaging.ImageFormat.Png);
+			bmp.Dispose();
 		}
 
 		public override string decryptFile(string file) {
