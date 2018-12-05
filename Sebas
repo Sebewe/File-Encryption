@@ -1,84 +1,109 @@
-
+using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 
 namespace File_Encryption {
 	
 	public class Sebas : Crypter {
 		
-		private int width;
-		private int height;
 		private string message;
 		private int[,] list;
 		private char[] chars;
-		private int path;
+		private string path;
+		private int size;
 		
-		public Sebas(int width, int height, string file, string message) : base("png", "Sebas", file) {
-			this.width = width;
-			this.height = height;
+		public Sebas(string file, string message) : base("png", "Sebas", file) {
 			this.message = message;
-			init(file);
+			this.size = (int) Math.Sqrt(message.Length) + 1;
 			this.init();
+
+			this.path = file;
+			if (!string.IsNullOrEmpty(path)) return;
+			
+			const string fileName = "sebas.png";
+			path = Directory.GetCurrentDirectory();
+			base.log($"size: {size}x{size}");
+			path = path.Substring(0, path.Length - 10);
+			base.log($"path w/out file name:\n{path}");
+			path = System.IO.Path.Combine(path, fileName);
 		}
 
-		private void init(string file) {
-			this.list = new int[,] {
-				{0, 0, 0},      //a
-				{20, 20, 20},   //b
-				{12, 50, 28},   //c
-				{250, 0, 0},    //d
-				{250, 250, 0},  //e
-				{250, 0, 250},  //f
-				{0, 250, 250},  //g
-				{0, 255, 0},    //h
-				{126, 0, 20},   //i
-				{20, 70, 20},   //j
-				{123, 123, 255},//k
-				{80, 90, 120},  //l
-				{75, 250, 20},  //m
-				{80, 188, 80},  //n
-				{25, 99, 100},  //o
-				{22, 180, 24},  //p
-				{69, 69, 69},   //q
-				{222, 111, 000},//r
-				{4, 2, 0},      //s
-				{1, 2, 3},      //t
-				{11,22,33},     //u
-				{80,90,100},    //v
-				{213,74,202},   //w
-				{101,202,28},   //x
-				{123,79,123},   //y
-				{169,142,74},   //z
-				{103,106,61},   //SPACE
-				{29,200,132},   //PERIOD
-			}; // all the colors
+		private void init() {
 			this.chars = new char[] {
 				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 				'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-				' ', '.'
-			}; //all the letters that correspond with the colors
-			
-			if (!string.IsNullOrEmpty(file)) return;
-			
-			const string fileName = "sebas.png";
-			var path = Directory.GetCurrentDirectory();
-			log(path);
-			path = path.Substring(0, path.Length - 10);
-			path = System.IO.Path.Combine(path, fileName);
-
+				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+			};
+			this.list = new int[chars.Length,3];
+			for (var i = 0; i < chars.Length; i++) {
+				list[i, 0] = i;
+				list[i, 1] = i;
+				list[i, 2] = i;
+			}
+			//all the letters that correspond with the colors
 		}
 
 		public override string encryptFile() {
-			Bitmap bmp = new Bitmap(50,50);
-			Graphics g = Graphics.FromImage(bmp);
-			g.FillRectangle(Brushes.Green, 0, 0, 50, 50);
-			g.Dispose();
-			bmp.Save("filepath", System.Drawing.Imaging.ImageFormat.Png);
+			var bmp = new Bitmap(this.size,this.size);
+			var atchar = -1;
+			for (var col = 0; col < bmp.Height; col++) 
+				for (var row = 0; row < bmp.Width; row++) {
+					atchar++;
+					bmp.SetPixel(row, col,atchar < message.Length
+						? getColorforChar(message.ToCharArray()[atchar])
+						: getColorforChar(' '));
+				}
+			
+			bmp.Save(path, ImageFormat.Png);
 			bmp.Dispose();
+			return path;
 		}
 
-		public override string decryptFile(string file) {
-			throw new System.NotImplementedException();
+		public override string decryptFile(string input) {
+			var final = "";
+			if (string.IsNullOrEmpty(input)) input = this.path;
+			
+			var dummy = Image.FromFile(input);
+			var tempPath = input.Substring(input.Length - 5);
+			tempPath += ".bmp";
+			dummy.Save(tempPath, ImageFormat.Bmp);
+
+			var bmp = new Bitmap(tempPath);
+			for (var col = 0; col < bmp.Height; col++)
+			for (var row = 0; row < bmp.Width; row++)
+				final += getCharforColor(bmp.GetPixel(row, col));
+			
+			bmp.Dispose();
+			System.IO.File.Delete(tempPath); // remove the created BMP
+			
+			return final;
+		}
+
+		private char getCharforColor(Color inputColor) {
+			int red = inputColor.R, green = inputColor.G, blue = inputColor.B;
+			for (var i = 0; i < this.list.Length; i++)
+				if (this.list[i, 0] == red && this.list[i, 1] == green && this.list[i, 2] == blue)
+					return this.chars[i];
+					
+			return '~';
+		}
+
+		private Color getColorforChar(char c) {
+			var charPosition = -1;
+			for(var i = 0; i < this.chars.Length; i++)
+				if (c == this.chars[i]) {
+					charPosition = i;
+					break;
+				}
+
+			if (charPosition != -1)
+				return Color.FromArgb(this.list[charPosition, 0], this.list[charPosition, 1],
+					this.list[charPosition, 2]);
+			
+			log($"Unknown char \'{c}\' make sure you are only using lowercase & numbers.");
+			return Color.FromArgb(255,255,255);
+
 		}
 		
 	}
