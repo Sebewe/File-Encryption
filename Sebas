@@ -14,7 +14,6 @@ namespace File_Encryption {
 		private int size;
 		
 		public Sebas(string file, string message) : base("png", "Sebas", file) {
-			this.message = message;
 			this.size = (int) Math.Sqrt(message.Length) + 1;
 			this.init();
 
@@ -25,7 +24,7 @@ namespace File_Encryption {
 			path = Directory.GetCurrentDirectory();
 			base.log($"size: {size}x{size}");
 			path = path.Substring(0, path.Length - 10);
-			base.log($"path w/out file name:\n{path}");
+			base.log($"path w/out file name:\n      {path}");
 			path = System.IO.Path.Combine(path, fileName);
 		}
 
@@ -33,7 +32,10 @@ namespace File_Encryption {
 			this.chars = new char[] {
 				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 				'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
+				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
+				';', '\'', '-', ':', '\n', '	', 
 			};
 			this.list = new int[chars.Length,3];
 			for (var i = 0; i < chars.Length; i++) {
@@ -45,19 +47,20 @@ namespace File_Encryption {
 		}
 
 		public override string encryptFile() {
-			var bmp = new Bitmap(this.size,this.size);
+			using (var bmp = new Bitmap(this.size, this.size)) { 
 			var atchar = -1;
-			for (var col = 0; col < bmp.Height; col++) 
-				for (var row = 0; row < bmp.Width; row++) {
-					atchar++;
-					bmp.SetPixel(row, col,atchar < message.Length
-						? getColorforChar(message.ToCharArray()[atchar])
-						: getColorforChar(' '));
+				for (var col = 0; col < bmp.Height; col++) {
+					for (var row = 0; row < bmp.Width; row++) {
+						atchar++;
+						bmp.SetPixel(row, col, atchar < message.Length
+							? getColorforChar(message.ToCharArray()[atchar])
+							: getColorforChar(' '));
+					}
 				}
-			
-			bmp.Save(path, ImageFormat.Png);
-			bmp.Dispose();
-			return path;
+				bmp.Save(path, ImageFormat.Png);
+				bmp.Dispose();
+			}
+		return path;
 		}
 
 		public override string decryptFile(string input) {
