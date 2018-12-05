@@ -22,34 +22,36 @@ namespace File_Encryption {
 		
 	
 
-	public abstract class Crypter {
+		public abstract class Crypter {
 		
-	    // YOUR CLASS MUST EXTEND THIS CLASS
+			// YOUR CLASS MUST EXTEND THIS CLASS
 		
-		protected string extension, name, file, secret;
-		protected int[] size;
-		
-		public Crypter(string extension, string name, int[] size, string file) {
-			this.name = name;
-			this.extension = extension;
-			this.size = size;
-			this.file = file;
+			protected string extension, name, file, secret;
+
+			protected Crypter(string extension, string name, string file) {
+				this.name = name;
+				this.extension = extension;
+				this.file = file;
+			}
+
+			protected void log(string log) {
+				Console.WriteLine($"{name}: {log}");	
+			}
+
+			public string getFile() {
+				return this.file;
+			}
+
+			public string setFile(string file) {
+				string temp = this.file;
+				this.file = file;
+				return temp;
+			}
+
+			public abstract string encryptFile(); //return your file's name
+
+			public abstract string decryptFile(string file); //return encrypted info
+
 		}
-
-		public string getFile() {
-			return this.file;
-		}
-
-		public string setFile(string file) {
-			string temp = this.file;
-			this.file = file;
-			return temp;
-		}
-
-		public abstract string encryptFile(); //return your file's name
-
-		public abstract string decryptFile(string file); //return encrypted info
-
-	}
 	
-}
+	}
