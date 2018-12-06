@@ -36,13 +36,13 @@ namespace File_Encryption {
 				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-				';', '\'', '-', ':', '\n', '	', '!', '*'
+				';', '\'', '-', ':', '\n', '	', '!', '*', '\"', '\\', '/',
 			};
 			this.list = new int[chars.Length,3];
 			for (var i = 0; i < chars.Length; i++) {
-				list[i, 0] = i;
-				list[i, 1] = i;
-				list[i, 2] = i;
+				list[i, 0] = 255-i;
+				list[i, 1] = 255-i;
+				list[i, 2] = 255-i;
 			}
 			//all the letters that correspond with the colors
 		}
