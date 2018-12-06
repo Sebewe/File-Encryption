@@ -25,7 +25,8 @@ namespace File_Encryption {
 			this.message = fileOrMessage;
 			
 			this.size = (int) Math.Sqrt(message.Length) + 1;
-			const string fileName = "sebas.png";
+			log("What would you like to name the file? (do not include the .png, we'll add it for you!)");
+			var fileName = Console.ReadLine() + ".png";
 			path = System.IO.Path.Combine(savePath, fileName);
 		}
 
@@ -40,9 +41,9 @@ namespace File_Encryption {
 			};
 			this.list = new int[chars.Length,3];
 			for (var i = 0; i < chars.Length; i++) {
-				list[i, 0] = 255-i;
-				list[i, 1] = 255-i;
-				list[i, 2] = 255-i;
+				list[i, 0] = i;
+				list[i, 1] = i;
+				list[i, 2] = i;
 			}
 			//all the letters that correspond with the colors
 		}
