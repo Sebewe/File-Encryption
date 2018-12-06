@@ -6,8 +6,6 @@
  * Sebastian - PNG
  * Zack - IMG
  * Elija - JPEG
- * Claire - BMP
- * Aaron - MP3
  */
 
 using System;
