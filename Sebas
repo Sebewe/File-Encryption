@@ -1,113 +1,113 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Net.Configuration;
 
 namespace File_Encryption {
 	
-	public class Sebas : Crypter {
+	public class Sebas{
 		
-		private string message;
-		private int[,] list;
+		private int[,] colorList;
 		private char[] chars;
 		private string path;
 		private int size;
+		private readonly Random random;
 		
-		public Sebas(bool isfile, string fileOrMessage, string savePath) : base("png", "Sebas", fileOrMessage) {
+		public Sebas() { // has been reformatted
+			this.random = new Random();
 			this.init();
-			if (isfile) {
-				path = fileOrMessage;
-				message = "";
-				return;
-			}
-
-			this.message = fileOrMessage;
-			
-			this.size = (int) Math.Sqrt(message.Length) + 1;
-			log("What would you like to name the file? (do not include the .png, we'll add it for you!)");
-			var fileName = Console.ReadLine() + ".png";
-			path = System.IO.Path.Combine(savePath, fileName);
+		}
+		
+		private static void log(string input) { //has been added since we no longer extend
+			Console.WriteLine($"Sebas: {input}");
 		}
 
-		private void init() {
+		private void init() { //has been reformatted
 			this.chars = new char[] {
 				'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
 				'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
 				'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-				';', '\'', '-', ':', '\n', '	', '!', '*', '\"', '\\', '/',
+				';', '\'', '-', ':', '\n', '\t', '!', '*', '\\', '?', '"', '#',
+				'(', ')', '$', '/', '[', ']', '\r',
 			};
-			this.list = new int[chars.Length,3];
+			this.colorList = new int[chars.Length,3];
 			for (var i = 0; i < chars.Length; i++) {
-				list[i, 0] = i;
-				list[i, 1] = i;
-				list[i, 2] = i;
+				colorList[i, 0] = random.Next(256);
+				colorList[i, 1] = random.Next(256);
+				colorList[i, 2] = random.Next(256);
 			}
 			//all the letters that correspond with the colors
 		}
 
-		public override string encryptFile() {
-			var bmp = new Bitmap(this.size, this.size);
-			var atchar = -1;
+		public string encryptFile(string inputText) { // has been reformatted
+			var bmp = new Bitmap((int) Math.Sqrt(inputText.Length) + 1, (int) Math.Sqrt(inputText.Length) + 1);
+			var atChar = -1;
+			var charArray = inputText.ToCharArray();
 			for (var col = 0; col < size; col++) {
 				for (var row = 0; row < size; row++) {
-					atchar++;
-					bmp.SetPixel(row, col, atchar < message.Length
-						? getColorforChar(message.ToCharArray()[atchar])
-						: getColorforChar(' '));
+					atChar++;
+					bmp.SetPixel(row, col, atChar < inputText.Length
+						? getColorForChar(charArray[atChar])
+						: getColorForChar(' '));
 				}
 			}
-			bmp.Save(path, ImageFormat.Png);
+			log("Please tell me the full path of where you would like to save the file (I'll add the .png)");
+			bmp.Save(Console.ReadLine()+".png", ImageFormat.Png);
 			bmp.Dispose();
 			return path;
 		}
 
-		public override string decryptFile(string input) {
+		public string decryptFile(string inputPath) { //working on reformatting
 			var final = "";
-			if (string.IsNullOrEmpty(input)) input = this.path;
 			
-			var dummy = Image.FromFile(input);
-			var tempPath = input.Substring(input.Length - 5);
+			var dummy = Image.FromFile(inputPath);
+			var tempPath = inputPath.Substring(inputPath.Length - 5);
 			tempPath += ".bmp";
 			dummy.Save(tempPath, ImageFormat.Bmp);
+			dummy.Dispose();
 
 			var bmp = new Bitmap(tempPath);
 			for (var col = 0; col < bmp.Height; col++)
 			for (var row = 0; row < bmp.Width; row++)
-				final += getCharforColor(bmp.GetPixel(row, col));
+				final += getCharForColor(bmp.GetPixel(row, col));
 			
 			bmp.Dispose();
 			System.IO.File.Delete(tempPath); // remove the created BMP
 			
+			log("Would you like to write this data to a txt file? (yes/no)");
+			if (Console.ReadLine().Equals("no")) return final;
+			log("Please tell me the full path of where you'd like to put the file, with the new name included" +
+			    " (I'll add the .txt)");
+			System.IO.File.WriteAllText(Console.ReadLine()+".txt", final);
 			return final;
 		}
 
-		private char getCharforColor(Color inputColor) {
+		private char getCharForColor(Color inputColor) {
 			int red = inputColor.R, green = inputColor.G, blue = inputColor.B;
-			for (var i = 0; i < this.list.Length; i++)
-				if (this.list[i, 0] == red && this.list[i, 1] == green && this.list[i, 2] == blue)
+			for (var i = 0; i < this.colorList.Length; i++) {
+				log(i.ToString());
+				if (this.colorList[i, 0] == red && this.colorList[i, 1] == green && this.colorList[i, 2] == blue)
 					return this.chars[i];
-					
+			}
+
 			return '~';
 		}
 
-		private Color getColorforChar(char c) {
+		private Color getColorForChar(char inputChar) {
 			var charPosition = -1;
 			for(var i = 0; i < this.chars.Length; i++)
-				if (c == this.chars[i]) {
+				if (inputChar == this.chars[i]) {
 					charPosition = i;
 					break;
 				}
 
 			if (charPosition != -1)
-				return Color.FromArgb(this.list[charPosition, 0], this.list[charPosition, 1],
-					this.list[charPosition, 2]);
+				return Color.FromArgb(this.colorList[charPosition, 0], this.colorList[charPosition, 1],
+					this.colorList[charPosition, 2]);
 			
-			log($"Unknown char \'{c}\' make sure you are only using lowercase & numbers.");
-			return Color.FromArgb(255,255,255);
-
+			log($"{inputChar}");
+			return Color.FromArgb(999,999,999,999);
 		}
 		
 	}
