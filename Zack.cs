@@ -21,7 +21,7 @@ namespace File_Encryption {
 
            
         public sealed override string encryptFile() {
-
+//ignore this part for now ill fix these errors later with the path
             using (var img = new FileStream(@"C:\Users\Zacke\Documents\zack.tif", FileMode.Create)) {
                 using (var bmp = new Bitmap(_size, _size)) {
                     int column;
