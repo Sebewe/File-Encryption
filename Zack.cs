@@ -14,7 +14,7 @@ namespace File_Encryption {
 			Console.WriteLine("What file path will you be using (include file+extension)");
 			var input = Console.ReadLine();
 			_path = input;
-
+//create a prompt function that prints the question and gets the input
 			Console.WriteLine("encode or decode?");
 			userinput:
 			var mode = Console.ReadLine();
