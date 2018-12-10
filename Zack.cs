@@ -43,13 +43,13 @@ namespace File_Encryption {
 						int row;
 						for (row = 0; row < bmp.Width && !string.IsNullOrEmpty(_binary); row++) {
 							var cp = bmp.GetPixel(row, column);
-
+//change it up so it creates a new image from the old to avoid indexed pixel format errors
 
 							var tmp = (int) char.GetNumericValue(_binary[0]);
 							switch (tmp) {
 								case 0: {
 									if (cp.R % 2 != 0)
-										bmp.SetPixel(row, column,
+										bmp.SetPixel(row, column, //indexed pixel format error
 											Color.FromArgb(cp.R - 1, cp.G, cp.B)); //please don't ask why i subtract to one and add to the other
 																					// it hurts to think about it
 									break;
