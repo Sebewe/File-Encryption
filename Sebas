@@ -4,8 +4,8 @@ using System.Drawing.Imaging;
 
 namespace File_Encryption {
 	
-	public class Sebas{
-		
+	public class Sebas {
+
 		private int[,] colorList;
 		private char[] chars;
 		private string path;
@@ -29,19 +29,22 @@ namespace File_Encryption {
 				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 				' ', '.', ',', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
 				';', '\'', '-', ':', '\n', '\t', '!', '*', '\\', '?', '"', '#',
-				'(', ')', '$', '/', '[', ']', '\r',
+				'(', ')', '$', '/', '[', ']', '\r', '&', '+', '%', '<', '>', '~',
+				'@', '_', '-', '=', '|', '^'
 			};
-			this.colorList = new int[chars.Length,3];
+			this.colorList = new int[chars.Length, 3];
 			for (var i = 0; i < chars.Length; i++) {
-				colorList[i, 0] = random.Next(256);
-				colorList[i, 1] = random.Next(256);
-				colorList[i, 2] = random.Next(256);
+				colorList[i,0] = i;
+				colorList[i,1] = i;
+				colorList[i,2] = i;
 			}
+			log($"chars: {chars.Length}... colors: {colorList.Length}");
 			//all the letters that correspond with the colors
 		}
 
 		public string encryptFile(string inputText) { // has been reformatted
-			var bmp = new Bitmap((int) Math.Sqrt(inputText.Length) + 1, (int) Math.Sqrt(inputText.Length) + 1);
+			this.size = (int) Math.Sqrt(inputText.Length) + 1;
+			var bmp = new Bitmap(size, size);
 			var atChar = -1;
 			var charArray = inputText.ToCharArray();
 			for (var col = 0; col < size; col++) {
@@ -69,9 +72,11 @@ namespace File_Encryption {
 
 			var bmp = new Bitmap(tempPath);
 			for (var col = 0; col < bmp.Height; col++)
-			for (var row = 0; row < bmp.Width; row++)
+			for (var row = 0; row < bmp.Width; row++) {
 				final += getCharForColor(bmp.GetPixel(row, col));
-			
+				if(row % 1000 == 0)log($"row: {row} : col {col}");
+			}
+			log("fin");
 			bmp.Dispose();
 			System.IO.File.Delete(tempPath); // remove the created BMP
 			
@@ -85,10 +90,9 @@ namespace File_Encryption {
 
 		private char getCharForColor(Color inputColor) {
 			int red = inputColor.R, green = inputColor.G, blue = inputColor.B;
-			for (var i = 0; i < this.colorList.Length; i++) {
-				log(i.ToString());
-				if (this.colorList[i, 0] == red && this.colorList[i, 1] == green && this.colorList[i, 2] == blue)
-					return this.chars[i];
+			for (var x = 0; x < chars.Length; x++) {
+				if (colorList[x, 0] == red && colorList[x, 1] == green && colorList[x, 2] == blue)
+					return this.chars[x];
 			}
 
 			return '~';
@@ -107,7 +111,7 @@ namespace File_Encryption {
 					this.colorList[charPosition, 2]);
 			
 			log($"{inputChar}");
-			return Color.FromArgb(999,999,999,999);
+			return Color.FromArgb(255,255,255);
 		}
 		
 	}
