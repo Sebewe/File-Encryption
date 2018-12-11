@@ -9,6 +9,8 @@
  */
 
 using System;
+using System.IO;
+using System.Text;
 
 namespace File_Encryption {
 	
@@ -16,10 +18,15 @@ namespace File_Encryption {
 
 		public static void Main(string[] args) {
 			var sebas = new Sebas();
+			string path;
+			string text;
+			
 			Console.WriteLine("Would you like to encrypt(1) or decrypt(2)?");
 			if (Console.ReadLine().Equals("1")) {//encrypt
 				Console.WriteLine("What is the full path of the txt file you'd like to encrypt?(.txt only, include extension)");
-				sebas.encryptFile(System.IO.File.ReadAllText(Console.ReadLine()));
+				path = Console.ReadLine();
+				text = File.ReadAllText(path);
+				sebas.encryptFile(text);
 			} else { //decrypt
 				Console.WriteLine("What is the full path of the txt file you'd like to decrypt?(.png only, include extension)");
 				sebas.decryptFile(Console.ReadLine());
