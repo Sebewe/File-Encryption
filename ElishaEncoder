@@ -1,3 +1,4 @@
+
 using System;
 using System.IO;
 using System.Linq;
@@ -5,7 +6,7 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Stenography2._0
+namespace ConsoleApplication1
 {
 
     public class Encoder
@@ -37,7 +38,7 @@ namespace Stenography2._0
                     {
                         Console.WriteLine("R = [" + i + "][" + j + "] = " + pixel.R);
                         Console.WriteLine("G = [" + i + "][" + j + "] = " + pixel.G);
-                        Console.WriteLine("G = [" + i + "][" + j + "] = " + pixel.B);
+                        Console.WriteLine("B = [" + i + "][" + j + "] = " + pixel.B);
 
                         char letter = Convert.ToChar(this.inputText.Substring(j, 1));
                         int value = Convert.ToInt32(letter);
@@ -56,7 +57,7 @@ namespace Stenography2._0
                 }
             }
 
-            string name = "stego";
+            string name = this.outputPath;
             img.Save(name, ImageFormat.Jpeg);
 
            
