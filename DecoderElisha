@@ -1,0 +1,59 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Drawing;
+
+namespace Stenography2._0
+{
+
+
+
+    public class Decoder
+    {
+        private readonly string imagePath;
+        private readonly string inputText;
+        private readonly string outputPath;
+        private readonly bool what;
+
+        public Decoder(string imagePath, string inputText, string outputPath)
+        {
+            this.imagePath = imagePath;
+            this.inputText = inputText;
+            this.outputPath = outputPath;
+            //this.Decoderq();
+
+           
+            
+            
+            Bitmap img = new Bitmap(this.imagePath);
+            string message = "";
+
+            Color lastpixel = img.GetPixel(img.Width - 1, img.Height - 1);
+            int msgLength = lastpixel.B;
+
+            for (int i = 0; i < img.Width; i++)
+            {
+                for (int j = 0; j < img.Height; j++)
+                {
+                    Color pixel = img.GetPixel(i, j);
+
+                    if (i < 1 && j < 10)
+                    {
+                        int value = pixel.B;
+                        Console.WriteLine(value);
+                        Console.WriteLine("stop here");
+                        char c = Convert.ToChar(value);
+                        Console.WriteLine(c);
+                        string letter = System.Text.Encoding.ASCII.GetString(new byte[] { Convert.ToByte(c) });
+
+                        message = message + letter;
+                        Console.WriteLine(letter);
+
+                    }       
+                }
+            }
+            
+        }
+    }
+}
