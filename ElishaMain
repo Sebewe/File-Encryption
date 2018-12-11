@@ -1,0 +1,32 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Drawing;
+
+
+namespace Stenography2._0
+{
+    internal class Program
+    {
+        public static void Main(string[] args)
+        {
+            //Program.What();
+            var inputText = Program.prompt("Input your message...");
+            var imagePath = Program.prompt("Image name...", ".jpg");
+            var outputPath = Program.prompt("just skip it..", ".txt");
+           var encoder = new Encoder( imagePath,  inputText, outputPath);
+            var decoder = new Decoder( imagePath,  inputText, outputPath);
+
+        }
+
+        private static string prompt(string message, string extension = "")
+        {
+            Console.WriteLine(message);
+            return Console.ReadLine() + extension;
+
+        }
+
+       
+
+    }
+}
