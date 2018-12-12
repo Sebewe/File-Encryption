@@ -6,26 +6,24 @@ using System.IO;
 namespace File_Encryption {
     public class Zack : Crypter {
         private readonly string _message;
-        private readonly string _path, _newPath;
+        private readonly string _path, _newPath, _end;
         private string _binary;
+        private int _endNum;
 
 
         public Zack() : base("tiff", "Zack", null) {
-            Console.WriteLine("What file path will you be using (include file+extension)");
-            var input = Console.ReadLine();
-            _path = input;
+            _endNum = 0;
+            _end = "---";
+            _path = Prompt("What file will you be encrypting / decrypting");
+            
 //create a prompt function that prints the question and gets the input
-            Console.WriteLine("encode or decode?");
-            userinput:
-            var mode = Console.ReadLine();
-
-
-            switch (mode) {
+            mode:
+            switch (Prompt("encode or decode?")) {
                 case "encode":
                     Console.WriteLine("Where would you like the encrypted file to save");
                     _newPath = Console.ReadLine();
                     Console.WriteLine("what is the message");
-                    _message = Console.ReadLine() + "---";
+                    _message = Console.ReadLine() + _end;
                     encryptFile();
                     break;
                 case "decode":
@@ -33,7 +31,7 @@ namespace File_Encryption {
                     break;
                 default:
                     Console.WriteLine("Try again");
-                    goto userinput;
+                    goto mode;
             }
         }
 
@@ -102,10 +100,11 @@ namespace File_Encryption {
             }
         }
 
-        private static Color GetRgb(char ch) {
-            int cbyte = ch;
-            var color = Color.FromArgb(cbyte, cbyte, cbyte);
-            return color;
+      
+
+        private string Prompt(string prompt) {
+            Console.WriteLine(prompt);
+            return Console.ReadLine();
         }
 
         public sealed override string decryptFile(string bs) {
@@ -130,9 +129,17 @@ namespace File_Encryption {
             }
 
             var decryption = "";
-            while (bindecryption.Length >= 8) {
+            while (bindecryption.Length >= 8 && !(_endNum >= _end.Length)) {
+                if (Convert.ToChar(Convert.ToInt32(bindecryption.Substring(0, 8), 2)) == _end[_endNum]) {
+                    _endNum++;
+                    Console.WriteLine(Convert.ToChar(Convert.ToInt32(bindecryption.Substring(0, 8), 2)));
+                }
+                else
+                    _endNum = 0;
                 decryption += Convert.ToChar(Convert.ToInt32(bindecryption.Substring(0, 8), 2));
+                
                 bindecryption = bindecryption.Substring(8);
+                
             }
 
             Console.WriteLine(decryption);
