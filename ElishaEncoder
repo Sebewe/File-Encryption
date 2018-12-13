@@ -1,12 +1,9 @@
 
 using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace ConsoleApplication1
+namespace Stenography2._0
 {
 
     public class Encoder
@@ -58,7 +55,7 @@ namespace ConsoleApplication1
             }
 
             string name = this.outputPath;
-            img.Save(name, ImageFormat.Jpeg);
+            img.Save(name, ImageFormat.Bmp);
 
            
 
@@ -69,8 +66,7 @@ namespace ConsoleApplication1
                 }*/
             
 
-            //saveFile.Filter = "Image Files (*.png, *.jpg) | *.png; *.jpg";
-            //saveFile.InitialDirectory = @"C:\Users\metech\Desktop";      
+                
         }
 
 
@@ -126,4 +122,3 @@ namespace ConsoleApplication1
 
     }
 }
-
