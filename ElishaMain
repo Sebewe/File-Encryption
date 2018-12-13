@@ -12,9 +12,9 @@ namespace Stenography2._0
         {
             //Program.What();
             var inputText = Program.prompt("Input your message...");
-            var imagePath = Program.prompt("Image name...", ".jpg");
-            var outputPath = Program.prompt("just skip it..", ".txt");
-           var encoder = new Encoder( imagePath,  inputText, outputPath);
+            var imagePath = Program.prompt("Image name...", ".bmp");
+            var outputPath = Program.prompt("just skip it..", ".bmp");
+            var encoder = new Encoder( imagePath,  inputText, outputPath);
             var decoder = new Decoder( imagePath,  inputText, outputPath);
 
         }
