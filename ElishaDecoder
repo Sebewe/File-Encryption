@@ -23,7 +23,7 @@ namespace Stenography2._0
            
             
             
-            Bitmap img = new Bitmap(this.outputPath);
+            var img = new Bitmap(this.outputPath);
             string message = "";
 
             Color lastpixel = img.GetPixel(img.Width - 1, img.Height - 1);
@@ -38,10 +38,10 @@ namespace Stenography2._0
                     if (i < 1 && j < this.inputText.Length)
                     {
                         int value = pixel.B;
-                        Console.WriteLine("Value before converting  = " + value);
+                        //Console.WriteLine("Value before converting  = " + value);
                         //Console.WriteLine("stop here");
                         char c = Convert.ToChar(value);
-                        Console.WriteLine("After convert.... = " + c);
+                        //Console.WriteLine("After convert.... = " + c);
                         //byte[] bb = Convert.ToByte(c.Substring);
 						
                         string letter = System.Text.Encoding.ASCII.GetString(new byte[] { Convert.ToByte(c) });
