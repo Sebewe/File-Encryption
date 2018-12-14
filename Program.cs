@@ -5,7 +5,7 @@
  * CURRENT FILE EXTENSIONS BEING USED (can be changed at any time): 
  * Sebastian - PNG
  * Zack - IMG
- * Elija - JPEG
+ * Elija - BMP
  */
 
 using System;
