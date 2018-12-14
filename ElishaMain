@@ -6,16 +6,16 @@ using System.Drawing;
 
 namespace Stenography2._0
 {
-    internal class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
-            //Program.What();
+            
             var inputText = Program.prompt("Input your message...");
             var imagePath = Program.prompt("Image name...", ".bmp");
-            var outputPath = Program.prompt("just skip it..", ".bmp");
-            var encoder = new Encoder( imagePath,  inputText, outputPath);
-            var decoder = new Decoder( imagePath,  inputText, outputPath);
+            var outputPath = Program.prompt("New image name...");
+            What( imagePath,  inputText,  outputPath);
+            
 
         }
 
@@ -26,7 +26,25 @@ namespace Stenography2._0
 
         }
 
-       
+        private static void What(string imagePath, string inputText, string outputPath)
+        {
+         
+            Console.WriteLine("Encode(1)/Decode(2)?");
+            var t = Console.ReadKey();
+            var answer = (int)(Console.ReadKey().KeyChar);
+            var b = (answer == 1);
+
+            if (b)
+            {
+                var encoder = new Encoder(imagePath,  inputText, outputPath);
+            }
+
+            else
+            {
+                var decoder = new Decoder(imagePath,  inputText, outputPath);
+                
+            }
+        }
 
     }
 }
