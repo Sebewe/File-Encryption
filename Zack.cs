@@ -46,7 +46,7 @@ namespace File_Encryption
             {
                 using (var bmp = new Bitmap(img))
                 {
-                    using (var bmp2 = new Bitmap(bmp.Width, bmp.Width))
+                    using (var bmp2 = new Bitmap(bmp.Width, bmp.Height))
                     {
                         // opens the images as bitmap and iterates through each pixel in the first image
                         for (var column = 0; column < bmp.Height; column++)
